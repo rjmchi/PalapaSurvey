@@ -2252,7 +2252,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      surveys: []
+      surveys: [],
+      status: ''
     };
   },
   methods: {
@@ -2310,62 +2311,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }(),
     sendSurvey: function () {
       var _sendSurvey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id) {
-        var ret, resp;
+        var ret;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
+                this.status = 'Sent';
+                _context2.prev = 1;
+                _context2.next = 4;
                 return fetch('/mail', {
                   method: "GET"
                 });
 
-              case 3:
+              case 4:
                 ret = _context2.sent;
                 console.log(ret);
-                _context2.next = 7;
-                return fetch('/api/survey/' + id, {
-                  method: "PUT",
-                  body: JSON.stringify({
-                    'status': 'Sent'
-                  }),
-                  headers: {
-                    'content-type': 'application/json'
-                  }
-                });
+                _context2.next = 8;
+                return this.updateStatus(id);
 
-              case 7:
-                resp = _context2.sent;
-                console.log(resp.status);
-
-                if (!resp.ok) {
-                  _context2.next = 14;
-                  break;
-                }
-
-                _context2.next = 12;
-                return resp.json();
-
-              case 12:
-                resp = _context2.sent;
-                this.fetchSurveys();
-
-              case 14:
-                _context2.next = 19;
+              case 8:
+                console.log(res.status);
+                _context2.next = 14;
                 break;
 
-              case 16:
-                _context2.prev = 16;
-                _context2.t0 = _context2["catch"](0);
+              case 11:
+                _context2.prev = 11;
+                _context2.t0 = _context2["catch"](1);
                 console.log(_context2.t0);
 
-              case 19:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[0, 16]]);
+        }, _callee2, this, [[1, 11]]);
       }));
 
       function sendSurvey(_x) {
@@ -2376,54 +2355,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }(),
     closeSurvey: function () {
       var _closeSurvey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(id) {
-        var resp;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
+                this.status = 'Closed';
                 _context3.next = 3;
-                return fetch('/api/survey/' + id, {
-                  method: "PUT",
-                  body: JSON.stringify({
-                    'status': 'Closed'
-                  }),
-                  headers: {
-                    'content-type': 'application/json'
-                  }
-                });
+                return this.updateStatus(id);
 
               case 3:
-                resp = _context3.sent;
-                console.log(resp.status);
-
-                if (!resp.ok) {
-                  _context3.next = 10;
-                  break;
-                }
-
-                _context3.next = 8;
-                return resp.json();
-
-              case 8:
-                resp = _context3.sent;
-                this.fetchSurveys();
-
-              case 10:
-                _context3.next = 15;
-                break;
-
-              case 12:
-                _context3.prev = 12;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
-
-              case 15:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[0, 12]]);
+        }, _callee3, this);
       }));
 
       function closeSurvey(_x2) {
@@ -2432,8 +2377,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return closeSurvey;
     }(),
-    deleteSurvey: function () {
-      var _deleteSurvey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(id) {
+    updateStatus: function () {
+      var _updateStatus = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(id) {
         var resp;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
@@ -2442,7 +2387,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context4.prev = 0;
                 _context4.next = 3;
                 return fetch('/api/survey/' + id, {
-                  method: "DELETE"
+                  method: "PUT",
+                  body: JSON.stringify({
+                    'status': this.status
+                  }),
+                  headers: {
+                    'content-type': 'application/json'
+                  }
                 });
 
               case 3:
@@ -2478,7 +2429,59 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4, this, [[0, 12]]);
       }));
 
-      function deleteSurvey(_x3) {
+      function updateStatus(_x3) {
+        return _updateStatus.apply(this, arguments);
+      }
+
+      return updateStatus;
+    }(),
+    deleteSurvey: function () {
+      var _deleteSurvey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(id) {
+        var resp;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
+                _context5.next = 3;
+                return fetch('/api/survey/' + id, {
+                  method: "DELETE"
+                });
+
+              case 3:
+                resp = _context5.sent;
+                console.log(resp.status);
+
+                if (!resp.ok) {
+                  _context5.next = 10;
+                  break;
+                }
+
+                _context5.next = 8;
+                return resp.json();
+
+              case 8:
+                resp = _context5.sent;
+                this.fetchSurveys();
+
+              case 10:
+                _context5.next = 15;
+                break;
+
+              case 12:
+                _context5.prev = 12;
+                _context5.t0 = _context5["catch"](0);
+                console.log(_context5.t0);
+
+              case 15:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this, [[0, 12]]);
+      }));
+
+      function deleteSurvey(_x4) {
         return _deleteSurvey.apply(this, arguments);
       }
 

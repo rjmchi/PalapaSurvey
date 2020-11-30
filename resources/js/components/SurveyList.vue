@@ -19,6 +19,7 @@
 		data () {
 			return {
 				surveys:[],
+				status: '',
 			}
 		},
 		methods: {
@@ -35,30 +36,25 @@
                 }
 			},
 			sendSurvey: async function(id) {
+				this.status = 'Sent';
 				try {
                     let ret = await fetch('/mail' , {method: "GET", });
 					console.log(ret);
-                    let resp = await fetch('/api/survey/'+id , {
-						method: "PUT", 
-						body:JSON.stringify({'status':'Sent'}),
-						headers: {
-							'content-type': 'application/json'
-						}
-					});
-                    console.log(resp.status);
-                    if (resp.ok) {
-                        resp = await resp.json();
-						this.fetchSurveys();
-                    }
+					await this.updateStatus(id);
+					console.log(res.status);
                 } catch (err) {
                     console.log(err);
                 }
 			},
 			closeSurvey: async function(id) {
+				this.status = 'Closed';
+				await this.updateStatus(id);
+			},
+			updateStatus: async function(id) {
 				try {
                     let resp = await fetch('/api/survey/'+id , {
 						method: "PUT", 
-						body:JSON.stringify({'status':'Closed'}),
+						body:JSON.stringify({'status':this.status}),
 						headers: {
 							'content-type': 'application/json'
 						}
